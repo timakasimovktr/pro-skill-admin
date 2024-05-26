@@ -1,0 +1,217 @@
+.loginPage {
+    position: relative;
+    background: #000000b5;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .modalWrapper {
+        background-color: #364C59;
+        padding: 30px;
+        border-radius: 10px;
+        min-width: 470px;
+
+        .headerComponents {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .formWrapper {
+            width: 100%;
+            max-width: 470px;
+
+            .inputElement {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 20px;
+
+                input {
+                    width: 100%;
+                    border: 1px solid #b1b1b1;
+                    border-radius: 10px;
+                    height: 40px;
+                    padding: 25px;
+                    color: #000000;
+                    font-family: Montserrat;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                }
+
+            }
+
+            .agePhoneNumber {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .inputElement:first-child {
+                    width: 60%;
+                    margin-right: 10px;
+                }
+            }
+
+            .genderWrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 40px;
+                padding: 25px;
+                margin-bottom: 20px;
+                border: 1px solid #b1b1b1;
+                border-radius: 10px;
+
+                p {
+                    color: #777373;
+                    font-family: Montserrat;
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                }
+
+                .radioWrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 45%;
+
+                    .genderItem {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        p {
+                            margin-right: 10px;
+                        }
+
+                        input[type="checkbox"] {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            border: 1px solid #000;
+                            background-color: transparent;
+                            appearance: none;
+                            outline: none;
+                        }
+
+                        input[type="checkbox"]:checked {
+                            background-color: #000;
+                        }
+                    }
+                }
+            }
+
+            .sendDataWrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .sendData {
+                    cursor: pointer;
+                    padding: 16px 25px;
+                    width: 100%;
+                    text-align: center;
+                    border-radius: 10px;
+                    background: #3B50CF;
+                    color: #ffffff;
+                    border: none;
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                    transition: 0.3s;
+                    border: 1px solid #3B50CF;
+
+                    &:hover {
+                        border: 1px solid #3B50CF;
+                        background: #ffffff;
+                        color: #000000;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.gradient {
+    --speed: 15s;
+    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+
+    width: 800px;
+    height: 800px;
+    position: absolute;
+    z-index: -1;
+    filter: blur(100px);
+    background-image: linear-gradient(hsl(158, 82%, 57%), hsl(252, 82, 57));
+    animation: rotate var(--speed) var(--easing) alternate infinite;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    transition: 0.25s;
+}
+
+// body {
+//     background-color: #222;
+//     position: absolute;
+//     inset: 0;
+//     display: flex;
+//     place-content: center;
+//     align-items: center;
+//     overflow: hidden;
+// }
+
+/* This is just to transition when you change the viewport size. */
+
+
+
+@media screen and (max-width: 600px) {
+    .loginPage {
+        // height: 100%;
+        position: relative;
+
+        .logoLogin {
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            top: 0px;
+            transform: translateX(-50%);
+        }
+
+        .modalWrapper {
+            width: 90%;
+            min-width: 300px;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            .headerComponents {
+                h1 {
+                    font-size: 25px;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+}

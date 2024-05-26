@@ -1,0 +1,478 @@
+.mainInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.mainInfoContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: calc(100vh - 71px);
+}
+
+.mainInfoCardsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+
+  .mainInfoCard {
+    width: 50%;
+    padding: 20px;
+    background: #E5ECF6;
+    border-radius: 10px;
+    border: 1px solid #1C1C1C1A;
+    position: relative;
+
+    .cardTitle {
+      font-size: 26px;
+      color: #414D55;
+      font-family: gilroy-medium;
+      margin-bottom: 10px;
+    }
+
+    .cardQty {
+      font-size: 30px;
+      color: #414D55;
+      font-family: gilroy-medium;
+    }
+
+    .plusIcon {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: #00000000;
+      border: 1px solid #000000fb;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      cursor: pointer;
+      font-size: 30px;
+      transition: 0.4s;
+
+      &:hover {
+        background: #000000fb;
+        color: white;
+      }
+    }
+
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+}
+
+.corporativeCreateWrapper {
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 20px;
+
+  .corporativeCreate {
+    padding: 20px;
+    width: 100%;
+    border: 1px solid #1C1C1C1A;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+
+    &.choosenStep {
+      display: flex;
+    }
+
+    .headingCreate {
+      font-size: 22px;
+      color: #000000;
+      font-family: gilroy-medium;
+      margin-bottom: 20px;
+    }
+
+    .formInputs {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .textInputsWrapper {
+        width: 60%;
+        margin-right: 10px;
+        display: flex;
+
+        .textInputsLine {
+          width: 50%;
+
+          &:first-child {
+            margin-right: 10px;
+          }
+
+          &:last-child {
+            margin-left: 10px;
+          }
+
+          .textInput {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+
+            label {
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+              margin-bottom: 5px;
+            }
+
+            input {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #a4a4a4;
+              border-radius: 5px;
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+            }
+
+            select {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #a4a4a4;
+              border-radius: 5px;
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+
+              option {
+                font-size: 16px;
+                color: #414D55;
+                font-family: gilroy-medium;
+              }
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+
+          }
+
+          .buttonsWrapper {
+            display: flex;
+
+            button {
+              width: 50%;
+              padding: 10px;
+              border: 1px solid #a4a4a4;
+              border-radius: 5px;
+              font-size: 16px;
+              color: #ffffff;
+              font-family: gilroy-medium;
+              cursor: pointer;
+              transition: 0.3s;
+
+              &:first-child {
+                background: #000000;
+                margin-right: 5px;
+              }
+
+              &:last-child {
+                background: #c70000;
+                margin-left: 5px;
+              }
+
+              &:hover {
+                background: #DCE3EF;
+                color: black;
+              }
+            }
+          }
+
+          .textAreaInput {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+            label {
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+              margin-bottom: 5px;
+            }
+
+            textarea {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #a4a4a4;
+              border-radius: 5px;
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+              max-height: 115px;
+              resize: none;
+            }
+          }
+
+          .colorChoose {
+            width: 100%;
+
+            label {
+              font-size: 16px;
+              color: #414D55;
+              font-family: gilroy-medium;
+            }
+
+            .colorItems {
+              display: flex;
+              justify-content: flex-start;
+
+              .colorItem {
+                margin-right: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .colorBox {
+                  width: 41px;
+                  height: 41px;
+                  border: 1px solid #a4a4a4;
+                  cursor: pointer;
+                  transition: 0;
+                  margin-right: 5px;
+                  border-radius: 5px;
+
+                  &.white {
+                    background: white;
+                  }
+
+                  &.black {
+                    background: black;
+                  }
+                }
+
+                h3 {
+                  font-size: 16px;
+                  color: #414D55;
+                  font-family: gilroy-medium;
+                }
+
+                &.active {
+                  .colorBox {
+                    border: 3px solid #2cbe00;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .imageInputsWrapper {
+        width: 40%;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        label {
+          width: 100%;
+          text-align-last: left;
+          font-size: 16px;
+          color: #414D55;
+          font-family: gilroy-medium;
+          margin-bottom: 5px;
+        }
+
+        .selectImageIconInput {
+          content: url('../../images/Light.jpg');
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          border: 1px dashed #a4a4a4;
+          min-height: 149px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s;
+          color: black;
+          margin-bottom: 20px;
+          max-height: 365px;
+
+          &:hover {
+            background: #E5ECF6;
+          }
+
+          .selectImageIcon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+          }
+
+          p {
+            font-size: 16px;
+            color: #414D55;
+            font-family: gilroy-medium;
+          }
+        }
+
+        .uploadedPhoto {
+          width: 100%;
+          color: black;
+          display: flex;
+          justify-content: space-between;
+
+          .uploadedPhotoItem {
+            width: 50%;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 5px;
+              border: 1px solid #a4a4a4;
+              max-height: 173px;
+            }
+
+            &:first-child {
+              margin-right: 10px;
+            }
+
+            &:last-child {
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+
+.table {
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  display: none;
+  flex-direction: column;
+
+  &.choosenStep {
+    display: flex;
+  }
+
+  .tableWrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid #1C1C1C1A;
+    color: black !important;
+
+    h3{
+      font-size: 22px;
+      color: #000000;
+      font-family: gilroy-medium;
+      margin-bottom: 30px;
+    }
+
+    .tableHeader {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      border-bottom: 1px solid #4a4a4a;
+      padding: 0 20px 15px 20px;
+
+      .tableHeaderItem {
+        width: 20%;
+        font-size: 16px;
+        font-family: gilroy-medium;
+
+        &:not(:last-child, :first-child) {
+          padding: 0 10px;
+        }
+      }
+    }
+
+    .tableBody {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .tableBodyItemWrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding: 0 20px 15px 20px;
+        border-bottom: 1px solid #4a4a4a;
+        
+        .tableBodyItem {
+          width: 20%;
+          font-size: 16px;
+          font-family: gilroy-medium;
+          display: flex;
+          
+          .tableBodyItemImages {
+            img {}
+          }
+
+          &:not(:last-child, :first-child) {
+            padding: 0 10px;
+          }
+        }
+
+        .remove, .change{
+          cursor: pointer;
+          min-width: 25px !important;
+          max-width: 25px !important;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.3s;
+            &:hover{
+              opacity: 0.5;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .smallItem{
+    min-width: 90px;
+    max-width: 90px;
+    display: flex;
+    justify-content: center;
+
+    &:first-child {
+      justify-content: flex-start;
+    }
+  }
+
+  .pagination{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    button{
+      border-radius: 5px;
+    }
+  }
+}

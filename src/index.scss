@@ -1,0 +1,214 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.cdnfonts.com/css/gilroy-bold');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box !important;
+}
+
+@keyframes hideLoader{
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+#root{
+  display: flex;
+}
+
+[data-hiddenelem="true"]{
+  display: none !important;
+}
+
+.Toastify{
+  z-index: 999999 !important;
+  position: relative !important;
+}
+
+.hiddenLoader{
+  animation: hideLoader 0.5s linear 1 forwards;
+}
+
+html{
+  background: rgb(255, 255, 255) !important;
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #000000;
+  overflow-x: hidden !important;
+  max-width: 2400px !important;
+  margin: 0 auto;
+}
+
+main{
+  overflow-x: hidden !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+.br10 {
+  border-radius: 10px;
+}
+
+h1 {
+  font-size: 55px;
+  font-family: Gilroy-Bold;
+  font-weight: 700;
+}
+
+p {
+  font-size: 20px;
+  font-family: gilroy-regular;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer !important;
+  transition: 0.3s;
+
+  &:hover {
+    filter: brightness(0.5);
+  }
+}
+
+.container {
+  max-width: 1485px;
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #FFF;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #FFF500;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, 50%);
+  border-radius: 50%;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+
+@keyframes rotate {
+  0% {
+      transform: translate(-50%, -50%) rotateZ(0deg);
+  }
+
+  100% {
+      transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+}
+
+@keyframes rotateccw {
+  0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+      transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes spin {
+
+  0%,
+  100% {
+      box-shadow: .2em 0px 0 0px currentcolor;
+  }
+
+  12% {
+      box-shadow: .2em .2em 0 0 currentcolor;
+  }
+
+  25% {
+      box-shadow: 0 .2em 0 0px currentcolor;
+  }
+
+  37% {
+      box-shadow: -.2em .2em 0 0 currentcolor;
+  }
+
+  50% {
+      box-shadow: -.2em 0 0 0 currentcolor;
+  }
+
+  62% {
+      box-shadow: -.2em -.2em 0 0 currentcolor;
+  }
+
+  75% {
+      box-shadow: 0px -.2em 0 0 currentcolor;
+  }
+
+  87% {
+      box-shadow: .2em -.2em 0 0 currentcolor;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
