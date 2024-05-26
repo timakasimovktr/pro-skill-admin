@@ -181,36 +181,35 @@ function Course() {
 
   const createLesson = async () => {
     console.log(lessonObject);
-    if (
-      !lessonObject.title ||
-      !lessonObject.file ||
-      !lessonObject.time ||
-      !lessonObject.moduleId
-    )
+  
+    if (!lessonObject.title || !lessonObject.file || !lessonObject.time || !lessonObject.moduleId) {
       return toast.error("Введите все данные!");
-
+    }
+  
     const myHeaders = new Headers();
     myHeaders.append("accept", "*/*");
-    myHeaders.append(
-      "Authorization",
-      `Bearer ${localStorage.getItem("@token")}`
-    );
-
+    myHeaders.append("Authorization", `Bearer ${localStorage.getItem("@token")}`);
+  
     const formdata = new FormData();
-    if (lessonObject.file && lessonObject.file.length > 0) {
-      formdata.append("file", lessonObject.file[0], "/path/to/file");
+  
+    if (lessonObject.file.length > 0) {
+      formdata.append("files", lessonObject.file[0], lessonObject.file[0].name);
     }
 
-    if (Array.isArray(lessonObject.items) && lessonObject.items.length > 0) {
-      lessonObject.items.forEach((item, index) => {
-        formdata.append("file", item, `/path/to/file/${index}`);
-      });
+    if(lessonObject.items[0]){
+      formdata.append("files", lessonObject.items[0], lessonObject.items[0].name);
     }
-
+    if(lessonObject.items[1]){
+      formdata.append("files", lessonObject.items[1], lessonObject.items[1].name);
+    }
+    if(lessonObject.items[2]){
+      formdata.append("files", lessonObject.items[2], lessonObject.items[2].name);
+    }
+  
     formdata.append("title", lessonObject.title);
     formdata.append("time", lessonObject.time);
     formdata.append("moduleId", lessonObject.moduleId);
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -218,15 +217,20 @@ function Course() {
       redirect: "follow",
     };
 
-    fetch(`${APP_ROUTES.URL}/lessons`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        toast.success("Урок успешно создан");
-        updateAllStates();
-        cancelUpdateLesson();
-      })
-      .catch((error) => toast.error("Произошла ошибка при создании урока"));
+    console.log(formdata);
+  
+    try {
+      const response = await fetch(`${APP_ROUTES.URL}/lessons`, requestOptions);
+      const result = await response.text();
+  
+      toast.success("Урок успешно создан");
+      updateAllStates();
+      cancelUpdateLesson();
+    } catch (error) {
+      toast.error("Произошла ошибка при создании урока");
+    }
   };
+  
 
   const removeLesson = async (id) => {
     if (window.confirm("Вы уверены что хотите удалить урок?")) {
@@ -608,7 +612,6 @@ function Course() {
                     type="file"
                     id="file-input"
                     placeholder="Загрузить видео"
-                    multiple
                     accept="video/mp4, video/mkv, video/avi"
                     onChange={(e) =>
                       setLessonObject({
@@ -625,10 +628,13 @@ function Course() {
                     placeholder="Загрузить видео"
                     multiple
                     onChange={(e) =>
-                      setLessonObject({
-                        ...lessonObject,
-                        items: e.target.files,
-                      })
+                      {
+                        setLessonObject({
+                          ...lessonObject,
+                          items: e.target.files,
+                        })
+                        console.log(e.target.files)
+                      }
                     }
                   />
                 </div>

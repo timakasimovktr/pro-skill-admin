@@ -1,5 +1,5 @@
 export const APP_ROUTES = {
-  URL: 'http://185.217.131.110:5000',
+  URL: 'https://proskill-academy.com/api',
   LOGIN: '/login',
   REFERRAL: '/referral',
   COURSE: '/course',
