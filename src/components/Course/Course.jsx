@@ -127,6 +127,7 @@ function Course() {
 
       toast.success("Модуль успешно создан");
       updateAllStates();
+      cancelUpdateModule();
     } catch (error) {
       toast.error("Произошла ошибка при создании модули");
     }
@@ -156,7 +157,7 @@ function Course() {
     );
 
     const formdata = new FormData();
-    formdata.append("files", courseObject.files[0], "/path/to/file");
+    formdata.append("files", courseObject.files[0], courseObject.files[0].name);
     formdata.append("title", courseObject.title);
     formdata.append("description", courseObject.description);
     formdata.append("author", courseObject.author);
@@ -174,42 +175,60 @@ function Course() {
       .then((result) => console.log(result))
       .catch((error) => toast.error("Произошла ошибка при создании Курса"));
 
-    toast.success("Урок успешно создан");
+    toast.success("Урок успешно создан!");
     updateAllStates();
     cancelUpdateCourse();
   };
 
   const createLesson = async () => {
-    console.log(lessonObject);
-  
-    if (!lessonObject.title || !lessonObject.file || !lessonObject.time || !lessonObject.moduleId) {
+    if (
+      !lessonObject.title ||
+      !lessonObject.file ||
+      !lessonObject.time ||
+      !lessonObject.moduleId
+    ) {
       return toast.error("Введите все данные!");
     }
-  
+
     const myHeaders = new Headers();
     myHeaders.append("accept", "*/*");
-    myHeaders.append("Authorization", `Bearer ${localStorage.getItem("@token")}`);
-  
+    myHeaders.append(
+      "Authorization",
+      `Bearer ${localStorage.getItem("@token")}`
+    );
+
     const formdata = new FormData();
-  
+
     if (lessonObject.file.length > 0) {
       formdata.append("files", lessonObject.file[0], lessonObject.file[0].name);
     }
 
-    if(lessonObject.items[0]){
-      formdata.append("files", lessonObject.items[0], lessonObject.items[0].name);
+    if (lessonObject.items[0]) {
+      formdata.append(
+        "files",
+        lessonObject.items[0],
+        lessonObject.items[0].name
+      );
     }
-    if(lessonObject.items[1]){
-      formdata.append("files", lessonObject.items[1], lessonObject.items[1].name);
+    if (lessonObject.items[1]) {
+      formdata.append(
+        "files",
+        lessonObject.items[1],
+        lessonObject.items[1].name
+      );
     }
-    if(lessonObject.items[2]){
-      formdata.append("files", lessonObject.items[2], lessonObject.items[2].name);
+    if (lessonObject.items[2]) {
+      formdata.append(
+        "files",
+        lessonObject.items[2],
+        lessonObject.items[2].name
+      );
     }
-  
+
     formdata.append("title", lessonObject.title);
     formdata.append("time", lessonObject.time);
     formdata.append("moduleId", lessonObject.moduleId);
-  
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -217,12 +236,10 @@ function Course() {
       redirect: "follow",
     };
 
-    console.log(formdata);
-  
     try {
       const response = await fetch(`${APP_ROUTES.URL}/lessons`, requestOptions);
       const result = await response.text();
-  
+
       toast.success("Урок успешно создан");
       updateAllStates();
       cancelUpdateLesson();
@@ -230,7 +247,6 @@ function Course() {
       toast.error("Произошла ошибка при создании урока");
     }
   };
-  
 
   const removeLesson = async (id) => {
     if (window.confirm("Вы уверены что хотите удалить урок?")) {
@@ -369,7 +385,9 @@ function Course() {
       description: "",
       time: "",
       files: [],
+      author: "",
     });
+    document.getElementById("course-file-input").value = "";
     setCourseUpdate(false);
   };
 
@@ -447,6 +465,33 @@ function Course() {
     );
 
     const formdata = new FormData();
+
+    if (lessonObject.file.length > 0) {
+      formdata.append("files", lessonObject.file[0], lessonObject.file[0].name);
+    }
+
+    if (lessonObject.items[0]) {
+      formdata.append(
+        "files",
+        lessonObject.items[0],
+        lessonObject.items[0].name
+      );
+    }
+    if (lessonObject.items[1]) {
+      formdata.append(
+        "files",
+        lessonObject.items[1],
+        lessonObject.items[1].name
+      );
+    }
+    if (lessonObject.items[2]) {
+      formdata.append(
+        "files",
+        lessonObject.items[2],
+        lessonObject.items[2].name
+      );
+    }
+
     formdata.append("id", lessonId);
     formdata.append("title", lessonObject.title);
     formdata.append("time", lessonObject.time);
@@ -481,11 +526,13 @@ function Course() {
     setLessonUpdate(false);
     setChoosenColor(1);
     document.getElementById("file-input").value = "";
+    document.getElementById("items-input").value = "";
     setLessonObject({
       file: [],
       title: "",
       time: "",
       moduleId: 0,
+      items: [],
     });
   };
 
@@ -624,18 +671,16 @@ function Course() {
                   <input
                     className="selectImageIconInput"
                     type="file"
-                    id="file-input"
+                    id="items-input"
                     placeholder="Загрузить видео"
                     multiple
-                    onChange={(e) =>
-                      {
-                        setLessonObject({
-                          ...lessonObject,
-                          items: e.target.files,
-                        })
-                        console.log(e.target.files)
-                      }
-                    }
+                    onChange={(e) => {
+                      setLessonObject({
+                        ...lessonObject,
+                        items: e.target.files,
+                      });
+                      console.log(e.target.files);
+                    }}
                   />
                 </div>
               </div>
@@ -727,7 +772,7 @@ function Course() {
                   <input
                     className="selectImageIconInput"
                     type="file"
-                    id="file-input"
+                    id="course-file-input"
                     placeholder="Загрузить фото"
                     multiple
                     accept="image/png, image/jpeg, image/jpg"
