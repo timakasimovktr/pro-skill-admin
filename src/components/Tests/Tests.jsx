@@ -1,46 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, EffectCards, FreeMode } from "swiper/modules";
-import "swiper/css/bundle";
-
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import { APP_ROUTES } from "../../router/Route";
 import axios from "axios";
-import "./Tests.scss";
-import { useNavigate } from "react-router-dom";
-import { Outlet, Link } from "react-router-dom";
+import { APP_ROUTES } from "../../router/Route";
 import { Helmet } from "react-helmet";
-
-import updateIcon from "../../images/updateIcon.svg";
-import deleteIcon from "../../images/deleteIcon.svg";
-
+import { useNavigate } from "react-router-dom";
 import SideBar from "../SideBar/SideBar";
 import TopSideBar from "../TopSideBar/TopSideBar";
+import "./Tests.scss";
+import deleteIcon from "../../images/deleteIcon.svg";
 
 function Course() {
   const title = "Тесты к урокам";
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
   const [allLessons, setAllLessons] = useState([]);
-  const [lessonUpdate, setLessonUpdate] = useState(false);
-  const [lessonId, setLessonId] = useState(0);
-  const [lessonObject, setLessonObject] = useState({
-    file: [],
-    title: "",
-    time: "",
-    moduleId: 0,
-  });
+  const [allQuestions, setAllQuestions] = useState([]);
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [answers, setAnswers] = useState([{ answer: "", isCorrect: false }]);
+  const [selectedLesson, setSelectedLesson] = useState(0);
 
   useEffect(() => {
-    updateAllStates();
+    getAllLessons();
+    getAllQuestions();
   }, []);
+
+  const navigate = useNavigate();
 
   const toggleSideBar = (boolValue) => {
     setIsOpenSideBar(boolValue);
   };
 
-  const getallLessons = async () => {
+  const getAllLessons = async () => {
     try {
       const response = await axios.get(`${APP_ROUTES.URL}/lessons`, {
         headers: {
@@ -53,129 +42,84 @@ function Course() {
     }
   };
 
-  const updateAllStates = () => {
-    getallLessons();
+  const removeQuestion = async (questionId) => {
+    try {
+      const response = await axios.delete(
+        `${APP_ROUTES.URL}/questions/${questionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("@token")}`,
+          },
+        }
+      );
+      toast.success("Вопрос успешно удален");
+      getAllQuestions();
+    } catch (error) {
+      toast.error("Произошла ошибка при удалении вопроса");
+    }
   };
 
-  const createLesson = async () => {
-    console.log(lessonObject);
-    if (
-      !lessonObject.title ||
-      !lessonObject.file ||
-      !lessonObject.time ||
-      !lessonObject.moduleId
-    )
-      return toast.error("Введите все данные!");
-
-    const myHeaders = new Headers();
-    myHeaders.append("accept", "*/*");
-    myHeaders.append(
-      "Authorization",
-      `Bearer ${localStorage.getItem("@token")}`
-    );
-
-    const formdata = new FormData();
-    formdata.append("file", lessonObject.file[0], "/path/to/file");
-    formdata.append("title", lessonObject.title);
-    formdata.append("time", lessonObject.time);
-    formdata.append("moduleId", lessonObject.moduleId);
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: formdata,
-      redirect: "follow",
-    };
-
-    fetch(`${APP_ROUTES.URL}/lessons`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        toast.success("Урок успешно создан");
-        updateAllStates();
-        cancelUpdateLesson();
-      })
-      .catch((error) => toast.error("Произошла ошибка при создании урока"));
-  };
-
-  const removeLesson = async (id) => {
-    if (window.confirm("Вы уверены что хотите удалить урок?")) {
-      fetch(`${APP_ROUTES.URL}/lessons/${id}`, {
-        method: "DELETE",
+  const getAllQuestions = async () => {
+    try {
+      const response = await axios.get(`${APP_ROUTES.URL}/questions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("@token")}`,
         },
-      })
-        .then((response) => response.text())
-        .then((result) => {
-          toast.success("Урок успешно удален!");
-          updateAllStates();
-        })
-        .catch((error) => {
-          toast.error("Произошла ошибка при удалении урока");
-        });
-    }
-  };
-
-  const changeLesson = (id) => {
-    setLessonId(id);
-    setLessonUpdate(true);
-    const lesson = allLessons.find((lesson) => lesson.id === id);
-    setLessonObject({
-      ...lessonObject,
-      title: lesson.title,
-      time: lesson.time,
-      moduleId: lesson.moduleId,
-    });
-  };
-
-  const updateLesson = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("accept", "*/*");
-    myHeaders.append(
-      "Authorization",
-      `Bearer ${localStorage.getItem("@token")}`
-    );
-  
-    const formdata = new FormData();
-    formdata.append("id", lessonId);
-    formdata.append("title", lessonObject.title);
-    formdata.append("time", lessonObject.time);
-    formdata.append("moduleId", lessonObject.moduleId);
-  
-    const requestOptions = {
-      method: "PATCH",
-      headers: myHeaders,
-      body: formdata,
-      redirect: "follow",
-    };
-  
-    try {
-      const response = await fetch(`${APP_ROUTES.URL}/lessons`, requestOptions);
-      const result = await response.text();
-  
-      if (response.ok) {
-        toast.success("Урок успешно изменен");
-        updateAllStates();
-        cancelUpdateLesson();
-      } else {
-        toast.error("Произошла ошибка при изменении урока");
-        console.error(result);
-      }
+      });
+      setAllQuestions(response.data);
     } catch (error) {
-      toast.error("Произошла ошибка при изменении урока");
-      console.error(error);
+      toast.error("Произошла ошибка при загрузке вопросов");
     }
   };
-  
-  const cancelUpdateLesson = () => {
-    setLessonUpdate(false);
-    document.getElementById("file-input").value = "";
-    setLessonObject({
-      file: [],
-      title: "",
-      time: "",
-      moduleId: 0,
-    });
+
+  const createQuestion = async () => {
+    try {
+      const response = await axios.post(
+        `${APP_ROUTES.URL}/questions`,
+        {
+          title: questionTitle,
+          answers: answers.map((ans) => ans.answer),
+          correctAnswer: answers.findIndex((ans) => ans.isCorrect),
+          lessonId: selectedLesson,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("@token")}`,
+          },
+        }
+      );
+      toast.success("Вопрос успешно создан");
+      setQuestionTitle("");
+      setAnswers([{ answer: "", isCorrect: false }]);
+      setSelectedLesson(0);
+      getAllQuestions();
+    } catch (error) {
+      toast.error("Произошла ошибка при создании вопроса");
+    }
+  };
+
+  const deleteAnswer = (index) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers.splice(index, 1);
+    setAnswers(updatedAnswers);
+  };
+
+  const handleAnswerChange = (index, event) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index].answer = event.target.value;
+    setAnswers(updatedAnswers);
+  };
+
+  const handleRadioChange = (index) => {
+    const updatedAnswers = answers.map((ans, idx) => ({
+      ...ans,
+      isCorrect: idx === index,
+    }));
+    setAnswers(updatedAnswers);
+  };
+
+  const addAnswer = () => {
+    setAnswers([...answers, { answer: "", isCorrect: false }]);
   };
 
   return (
@@ -192,111 +136,88 @@ function Course() {
           isOpenSideBar={isOpenSideBar}
         />
         <div className="mainInfoContainer">
-
-          <div className="corporativeCreateWrapper" style={{marginTop: "20px"}}>
-            <div
-              className={`corporativeCreate choosenStep`}
-            >
-              <h2 className="headingCreate">
-                {lessonUpdate ? "Изменить Тест" : "Новый Тест"}
-              </h2>
+          <div
+            className="corporativeCreateWrapper"
+            style={{ marginTop: "20px" }}
+          >
+            <div className={`corporativeCreate choosenStep`}>
+              <h2 className="headingCreate">Новый тест к уроку</h2>
               <div className="formInputs">
                 <div className="textInputsWrapper">
                   <div className="textInputsLine">
                     <div className="textInput">
-                      <label>Вопрос урока *</label>
+                      <label>Вопрос *</label>
                       <input
                         type="text"
-                        value={lessonObject.title}
-                        onChange={(e) =>
-                          setLessonObject({
-                            ...lessonObject,
-                            title: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="textInput">
-                      <label>Длительность урока *</label>
-                      <input
-                        type="text"
-                        value={lessonObject.time}
-                        onChange={(e) =>
-                          setLessonObject({
-                            ...lessonObject,
-                            time: e.target.value,
-                          })
-                        }
+                        value={questionTitle}
+                        onChange={(e) => setQuestionTitle(e.target.value)}
                       />
                     </div>
                     <div className="buttonsWrapper">
-                      <button
-                        onClick={() =>
-                          lessonUpdate ? updateLesson() : createLesson()
-                        }
-                      >
-                        {lessonUpdate ? "Изменить" : "Создать"}
-                      </button>
-                      <button onClick={() => cancelUpdateLesson()}>
-                        Отмена
-                      </button>
+                      <button onClick={createQuestion}>Создать</button>
+                      <button onClick={() => navigate(-1)}>Отмена</button>
                     </div>
                   </div>
                   <div className="textInputsLine">
-                    <div className="textInput">
-                      <label>Модуль урока *</label>
-                      <select
-                        name=""
-                        id=""
-                        value={lessonObject.moduleId}
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                          setLessonObject({
-                            ...lessonObject,
-                            moduleId: +e.target.value,
-                          });
-                        }}
-                      >
-                        <option hidden value="">
-                          Выберите модуль
-                        </option>
-                        {/* {allModules.map((module) => (
-                          <option key={module.id} value={module.id}>
-                            {module.title}
-                          </option>
-                        ))} */}
-                      </select>
+                    {answers.map((answer, index) => (
+                      <div className="testInput" key={index}>
+                        <label>Ответ *</label>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <input
+                            type="radio"
+                            checked={answer.isCorrect}
+                            onChange={() => handleRadioChange(index)}
+                          />
+                          <input
+                            type="text"
+                            value={answer.answer}
+                            onChange={(e) => handleAnswerChange(index, e)}
+                          />
+                          <button
+                            className="deleteAnswerBtn"
+                            onClick={() => deleteAnswer(index)}
+                          >
+                            Удалить
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="buttonsWrapper">
+                      <button className="newAnswerBtn" onClick={addAnswer}>
+                        Добавить ответ
+                      </button>
                     </div>
                   </div>
                 </div>
                 <div className="imageInputsWrapper">
-                  <label>Выберите Видео *</label>
-                  <input
-                    className="selectImageIconInput"
-                    type="file"
-                    id="file-input"
-                    placeholder="Загрузить видео"
-                    multiple
-                    accept="video/mp4, video/mkv, video/avi"
+                  <label>Выберите Урок *</label>
+                  <select
+                    value={selectedLesson}
                     onChange={(e) =>
-                      setLessonObject({ ...lessonObject, file: e.target.files })
+                      setSelectedLesson(parseInt(e.target.value))
                     }
-                  />
+                  >
+                    <option value={0}>Выберите урок</option>
+                    {allLessons.map((lesson) => (
+                      <option key={lesson.id} value={lesson.id}>
+                        {lesson.title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
           </div>
 
-          {allLessons.length > 0 && (
+          {/* {allLessons.length > 0 && (
             <div
-              className={`table choosenStep`}
-            > 
+              className={`table ${choosenCreateStep === 1 && "choosenStep"}`}
+            >
               <div className="tableWrapper">
                 <div className="tableHeader">
                   <div className="tableHeaderItem smallItem">ID</div>
-                  <div className="tableHeaderItem">Вопрос</div>
-                  <div className="tableHeaderItem">Урок</div>
-                  <div className="tableHeaderItem smallItem">Изменить</div>
+                  <div className="tableHeaderItem">Наименование</div>
+                  <div className="tableHeaderItem">Модуль</div>
                   <div className="tableHeaderItem smallItem">Удалить</div>
                 </div>
                 <div className="tableBody">
@@ -305,20 +226,13 @@ function Course() {
                       <div className="tableBodyItem smallItem">{index + 1}</div>
                       <div className="tableBodyItem">{lesson.title}</div>
                       <div className="tableBodyItem">
-                        {/* {allModules.map((module) => {
+                        {allModules.map((module) => {
                           if (module.id === lesson.moduleId) {
                             return module.title;
                           }
-                        })} */}
+                        })}
                       </div>
-                      <div className="tableBodyItem smallItem">
-                        <div
-                          className="change"
-                          onClick={() => changeLesson(lesson.id)}
-                        >
-                          <img src={updateIcon} alt={updateIcon} />
-                        </div>
-                      </div>
+                      
                       <div className="tableBodyItem smallItem">
                         <div
                           className="remove"
@@ -332,13 +246,47 @@ function Course() {
                 </div>
               </div>
             </div>
+          )} */}
+
+          {allQuestions.length > 0 && (
+            <div className="table choosenStep">
+              <div className="tableWrapper">
+                <div className="tableHeader">
+                  <div className="tableHeaderItem smallItem">ID</div>
+                  <div className="tableHeaderItem">Вопрос</div>
+                  <div className="tableHeaderItem">Урок</div>
+                  <div className="tableHeaderItem smallItem">Удалить</div>
+                </div>
+                <div className="tableBody">
+                  {allQuestions.toReversed().map((question, index) => (
+                    <div className="tableBodyItemWrapper" key={index}>
+                      <div className="tableBodyItem smallItem">{index + 1}</div>
+                      <div className="tableBodyItem">{question.title}</div>
+                      <div className="tableBodyItem">
+                        {allLessons.map((lesson) => {
+                          if (lesson.id === question.lessonId) {
+                            return lesson.title;
+                          }
+                        })}
+                      </div>
+                      <div className="tableBodyItem smallItem">
+                        <div
+                          className="remove"
+                          onClick={() => removeQuestion(question.id)}
+                        >
+                          <img src={deleteIcon} alt={deleteIcon} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
-
-      <Outlet />
     </>
-  )
+  );
 }
 
 export default Course;
