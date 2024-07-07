@@ -490,9 +490,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 15px;
-        padding: 0 20px 15px 20px;
+        padding: 15px 20px;
         border-bottom: 1px solid #4a4a4a;
+
+        &:hover {
+          background: #E5ECF6;
+        }
 
         .tableBodyItem {
           width: 20%;

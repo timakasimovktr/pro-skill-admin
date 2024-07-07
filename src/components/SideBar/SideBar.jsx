@@ -14,9 +14,12 @@ import refferalIcon from "../../images/refIcon.svg";
 import corporativeIcon from "../../images/corporativeIcon.svg";
 
 function SideBar(props) {
+  const role = localStorage.getItem("@role");
+
   const logout = () => {
     if (!window.confirm("Вы уверены что хотите выйти из системы?")) return;
     localStorage.removeItem("@token");
+    localStorage.removeItem("@role");
     window.location.reload();
   };
 
@@ -32,18 +35,64 @@ function SideBar(props) {
           </div>
         </div>
         <div className="sideBarNav">
-          <Link reloadDocument to={APP_ROUTES.COURSE} className={`navLink ${props.title === "Админ панель" && 'isActive'}`}>
-            <div className="navLinkIcon">
-              <img src={corporativeIcon} alt={corporativeIcon} />
-            </div>
-            <h4>Админ панель</h4>
-          </Link>
-          <Link reloadDocument to={APP_ROUTES.TESTS} className={`navLink ${props.title === "Тесты к урокам" && 'isActive'}`}>
-            <div className="navLinkIcon">
-              <img src={refferalIcon} alt={refferalIcon} />
-            </div>
-            <h4>Тесты к урокам</h4>
-          </Link>
+          {role === "admin" && (
+            <>
+              <Link
+                reloadDocument
+                to={APP_ROUTES.COURSE}
+                className={`navLink ${
+                  props.title === "Админ панель" && "isActive"
+                }`}
+              >
+                <div className="navLinkIcon">
+                  <img src={corporativeIcon} alt={corporativeIcon} />
+                </div>
+                <h4>Админ панель</h4>
+              </Link>
+              <Link
+                reloadDocument
+                to={APP_ROUTES.TESTS}
+                className={`navLink ${
+                  props.title === "Тесты к урокам" && "isActive"
+                }`}
+              >
+                <div className="navLinkIcon">
+                  <img src={refferalIcon} alt={refferalIcon} />
+                </div>
+                <h4>Тесты к урокам</h4>
+              </Link>
+              <Link
+                reloadDocument
+                to={APP_ROUTES.MESSAGES}
+                className={`navLink ${
+                  props.title === "Заявки клиеннтов" && "isActive"
+                }`}
+              >
+                <div className="navLinkIcon">
+                  <img src={messangerIcon} alt={messangerIcon} />
+                </div>
+                <h4>Заявки клиеннтов</h4>
+              </Link>
+            </>
+          )}
+
+          {role === "mentor" && (
+            <>
+              <Link
+                reloadDocument
+                to={APP_ROUTES.CHAT}
+                className={`navLink ${
+                  props.title === "Чат со студентами" && "isActive"
+                }`}
+              >
+                <div className="navLinkIcon">
+                  <img src={messangerIcon} alt={messangerIcon} />
+                </div>
+                <h4>Чат со студентами</h4>
+              </Link>
+            </>
+          )}
+
           {/* <Link reloadDocument to={APP_ROUTES.REFERRAL} className={`navLink ${props.title === "Рефералка" && 'isActive'}`}>
             <div className="navLinkIcon">
               <img src={refferalIcon} alt={refferalIcon} />

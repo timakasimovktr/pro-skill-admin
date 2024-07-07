@@ -73,6 +73,11 @@ function Course() {
   };
 
   const createQuestion = async () => {
+    if (!questionTitle || !selectedLesson || answers.length < 2 || answers.findIndex((ans) => ans.isCorrect) === -1) {
+      toast.error("Заполните все поля");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${APP_ROUTES.URL}/questions`,
@@ -253,16 +258,16 @@ function Course() {
               <div className="tableWrapper">
                 <div className="tableHeader">
                   <div className="tableHeaderItem smallItem">ID</div>
-                  <div className="tableHeaderItem">Вопрос</div>
-                  <div className="tableHeaderItem">Урок</div>
+                  <div className="tableHeaderItem" style={{minWidth: "500px"}}>Вопрос</div>
+                  <div className="tableHeaderItem" style={{minWidth: "300px"}}>Урок</div>
                   <div className="tableHeaderItem smallItem">Удалить</div>
                 </div>
                 <div className="tableBody">
                   {allQuestions.toReversed().map((question, index) => (
                     <div className="tableBodyItemWrapper" key={index}>
                       <div className="tableBodyItem smallItem">{index + 1}</div>
-                      <div className="tableBodyItem">{question.title}</div>
-                      <div className="tableBodyItem">
+                      <div className="tableBodyItem" style={{minWidth: "500px"}}>{question.title}</div>
+                      <div className="tableBodyItem" style={{minWidth: "300px"}}>
                         {allLessons.map((lesson) => {
                           if (lesson.id === question.lessonId) {
                             return lesson.title;

@@ -22,10 +22,19 @@ function FormLogin() {
       });
 
       const token = response.data.access_token;
-
+      
       if (token) {
         localStorage.setItem("@token", token);
-        navigation(APP_ROUTES.COURSE, { replace: true });
+        localStorage.setItem("@role", response.data.role);
+        if (response.data.role === "admin") {
+          navigation(APP_ROUTES.COURSE, { replace: true });
+        } else if (response.data.role === "mentor") {
+          navigation(APP_ROUTES.CHAT, { replace: true });
+        } else if (response.data.role === "finance") {
+          navigation(APP_ROUTES.FINANCE, { replace: true });
+        } else {
+          toast.error("Не верный логин или пароль");
+        }
       }
     } catch (error) {
       toast.error("Не верный логин или пароль");
